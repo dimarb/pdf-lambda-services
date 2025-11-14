@@ -480,3 +480,9 @@ Con esta arquitectura:
 - [Gotenberg Documentation](https://gotenberg.dev)
 - [N8N Documentation](https://docs.n8n.io)
 - [AWS Lambda Documentation](https://docs.aws.amazon.com/lambda/)
+
+---
+By
+<div align="center">
+  <img src="./dimar-borda.png" alt="dimar-borda" width="300" height="300" />
+</div>
