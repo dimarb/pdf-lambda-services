@@ -1,0 +1,21 @@
+# Custom Gotenberg image optimized for AWS Lambda
+FROM gotenberg/gotenberg:8-aws-lambda
+
+# Critical flags for Lambda environment
+# These solve the /dev/shm limitation and filesystem issues
+ENV CHROMIUM_DISABLE_DEV_SHM_USAGE=true
+ENV CHROMIUM_NO_SANDBOX=true
+ENV CHROMIUM_SINGLE_PROCESS=true
+ENV CHROMIUM_DISABLE_GPU=true
+ENV CHROMIUM_USER_DATA_DIR=/tmp/chromium-data
+
+# Additional Lambda optimizations
+ENV CHROMIUM_DISABLE_SOFTWARE_RASTERIZER=true
+ENV CHROMIUM_DISABLE_EXTENSIONS=true
+ENV CHROMIUM_DISABLE_BACKGROUND_NETWORKING=true
+
+# LibreOffice optimizations for Lambda
+ENV LIBREOFFICE_DISABLE_OPENCL=true
+
+LABEL maintainer="Gotenberg Lambda Deployment Tool"
+LABEL description="Custom Gotenberg image optimized for AWS Lambda with /dev/shm fixes"

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # Gotenberg service for local testing
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: gotenberg-pdf-service-local
+    ports:
+      - "${GOTENBERG_API_PORT:-3000}:3000"
+    environment:
+      # Authentication
+      - API_ENABLE_BASIC_AUTH=${API_ENABLE_BASIC_AUTH}
+      - GOTENBERG_API_BASIC_AUTH_USERNAME=${GOTENBERG_API_BASIC_AUTH_USERNAME}
+      - GOTENBERG_API_BASIC_AUTH_PASSWORD=${GOTENBERG_API_BASIC_AUTH_PASSWORD}
+
+      # General configuration
+      - GOTENBERG_LOG_LEVEL=${GOTENBERG_LOG_LEVEL}
+
+      # PDF Engines
+      - PDFENGINES_MERGE_ENGINES=${PDFENGINES_MERGE_ENGINES}
+      - PDFENGINES_SPLIT_ENGINES=${PDFENGINES_SPLIT_ENGINES}
+      - PDFENGINES_FLATTEN_ENGINES=${PDFENGINES_FLATTEN_ENGINES}
+      - PDFENGINES_CONVERT_ENGINES=${PDFENGINES_CONVERT_ENGINES}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # Deployment tool container
+  deploy-tool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gotenberg-deploy-tool
+    volumes:
+      - .:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
+    env_file:
+      - .env
+    profiles:
+      - tools
