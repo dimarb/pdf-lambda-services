@@ -243,3 +243,9 @@ make test-webhook
 Este proyecto es una herramienta de deployment para Gotenberg en AWS Lambda.
 - Gotenberg: MIT License
 - Este deployment tool: Uso libre
+
+---
+By
+<div align="center">
+  <img src="./dimar-borda.png" alt="dimar-borda" width="300" height="300" />
+</div>
